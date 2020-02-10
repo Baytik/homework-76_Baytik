@@ -23,6 +23,7 @@ class Chat extends Component {
                     <div className="chat-block" key={obj}>
                     <p className="author">{this.props.messages[obj].author}</p>
                     <p className="message">{this.props.messages[obj].message}</p>
+                    <p className="date">{this.props.messages[obj].datetime}</p>
                     </div>
                 ))}
             </div>
