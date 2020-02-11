@@ -1,0 +1,6 @@
+{
+  "id": "cc50_tlFc8IBf77pJtb3E",
+  "message": "hello, world",
+  "author": "john",
+  "datetime": "2020-02-11T12:31:12.049Z"
+}

@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import './Chat.css';
-import {fetchMessage, postMessage} from "../../store/actions/actions";
+import {fetchMessage, fetchMessageDate, postMessage} from "../../store/actions/actions";
 import {connect} from "react-redux";
 
 class Chat extends Component {
@@ -12,7 +12,7 @@ class Chat extends Component {
 
     async componentDidMount() {
         setInterval(() => {
-            this.props.fetchMessage();
+            this.getObjectMessages();
         }, 2000);
     }
 
@@ -28,9 +28,18 @@ class Chat extends Component {
         await this.props.postMessage(newMessage);
     };
 
+    getObjectMessages = async (datetime) => {
+      if (datetime === null || datetime === undefined) {
+          await this.props.fetchMessage();
+      } else {
+          const lastDateTime = this.props.messages[this.props.messages.length - 1].datetime;
+          await this.props.fetchMessageDate(lastDateTime);
+      }
+    };
+
     async componentDidUpdate() {
        await clearInterval(() => {
-            this.props.fetchMessage()
+            this.getObjectMessages();
         })
     }
 
@@ -62,7 +71,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     fetchMessage: (message) => dispatch(fetchMessage(message)),
-    postMessage: (newMessage) => dispatch(postMessage(newMessage))
+    postMessage: (newMessage) => dispatch(postMessage(newMessage)),
+    fetchMessageDate: (date) => dispatch(fetchMessageDate(date)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);
