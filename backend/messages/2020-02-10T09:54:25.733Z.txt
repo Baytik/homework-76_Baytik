@@ -1,6 +1,0 @@
-{
-  "id": "jHH-nZcB5lraB4YgKMGf0",
-  "message": "hello",
-  "author": "john",
-  "datetime": "2020-02-10T09:54:25.733Z"
-}

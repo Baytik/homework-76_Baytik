@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import './Chat.css';
-import {fetchMessage} from "../../store/actions/actions";
+import {fetchMessage, postMessage} from "../../store/actions/actions";
 import {connect} from "react-redux";
 
 class Chat extends Component {
@@ -11,11 +11,30 @@ class Chat extends Component {
     };
 
     async componentDidMount() {
-       this.props.fetchMessage();
+        setInterval(() => {
+            this.props.fetchMessage();
+        }, 2000);
+    }
+
+    changeInputHandler = e => {
+        this.setState({[e.target.name]: e.target.value})
+    };
+
+    postingMessage = async () => {
+        const newMessage = {
+          author: this.state.author,
+          message: this.state.message
+        };
+        await this.props.postMessage(newMessage);
+    };
+
+    async componentDidUpdate() {
+       await clearInterval(() => {
+            this.props.fetchMessage()
+        })
     }
 
     render() {
-        console.log(this.props.messages);
         return (
             <Fragment>
             <div className="Chat">
@@ -28,9 +47,9 @@ class Chat extends Component {
                 ))}
             </div>
                 <div className="form-block">
-                    <input type="text" placeholder="author" name="author"/>
-                    <input type="text" placeholder="message" name="message"/>
-                    <button>Send</button>
+                    <input type="text" placeholder="author" name="author" onChange={this.changeInputHandler}/>
+                    <input type="text" placeholder="message" name="message" onChange={this.changeInputHandler}/>
+                    <button onClick={this.postingMessage}>Send</button>
                 </div>
             </Fragment>
         );
@@ -42,7 +61,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    fetchMessage: (message) => dispatch(fetchMessage(message))
+    fetchMessage: (message) => dispatch(fetchMessage(message)),
+    postMessage: (newMessage) => dispatch(postMessage(newMessage))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);
